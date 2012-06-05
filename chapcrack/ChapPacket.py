@@ -46,7 +46,7 @@ class ChapPacket:
         payload         = self._getPayload()
         challengeLength = ord(payload[0])
 
-        return payload[1:challengeLength]
+        return payload[1:challengeLength+1]
 
     def getPeerChallenge(self):
         payload = self._getPayload()

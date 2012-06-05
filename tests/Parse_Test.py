@@ -41,18 +41,19 @@ class ParseTest(unittest.TestCase):
                 plaintext  = ProtocolLogic.getPlaintext(complete[server][client])
                 username   = ProtocolLogic.getUserName(complete[server][client])
 
-                assert username == "scott"
+                assert username == "moxie"
 
-#                result = nthash.raw_nthash('purple')
+                hash = nthash.raw_nthash('bPCFyF2uL1p5Lg5yrKmqmY')
 
-                digest = MD4()
-                digest.update("purple")
-                result = digest.digest()
+                print "NT Hash: %s" % binascii.hexlify(hash)
 
-                key1 = result[0:7]
+                key1 = hash[0:7]
                 key1 = des.expand_des_key(key1)
 
                 result = des.des_encrypt_block(key1, plaintext)
+
+                print "DES Encryption: %s" % binascii.hexlify(result)
+                print "C1: %s" % binascii.hexlify(c1)
 
                 assert result == c1
 

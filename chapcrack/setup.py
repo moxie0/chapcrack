@@ -9,7 +9,7 @@ import shutil
 
 shutil.copyfile("chapcrack.py", "chapcrack/chapcrack")
 
-REQUIRES = ['dpkt']
+REQUIRES = ['dpkt', 'passlib']
 
 setup  (name             = 'chapcrack',
         version          = '0.1',
