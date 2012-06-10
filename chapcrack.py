@@ -1,40 +1,28 @@
 #!/usr/bin/env python
 
-import sys
-from chapcrack.ChapPacketReader import ChapPacketReader
-from chapcrack.HandshakeStateManager import HandshakeStateManager
-from chapcrack.ProtocolLogic import ProtocolLogic
+"""A tool for parsing and decrypting PPTP packet captures."""
 
-def printUsage():
-    print "chapcrack.py <pcap>"
-    sys.exit(0)
+import sys
+from chapcrack.commands.DecryptCommand import DecryptCommand
+from chapcrack.commands.HelpCommand import HelpCommand
+from chapcrack.commands.ParseCommand import ParseCommand
+
+__author__    = "Moxie Marlinspike"
+__license__   = "GPLv3"
+__copyright__ = "Copyright 2012, Moxie Marlinspike"
 
 def main(argv):
     if len(argv) < 1:
-        printUsage()
+        HelpCommand.printGeneralUsage("Missing command")
 
-    handshakes = HandshakeStateManager()
-    capture    = open(argv[0])
-    reader     = ChapPacketReader(capture)
-
-    for packet in reader:
-        handshakes.addHandshakePacket(packet)
-
-    complete = handshakes.getCompletedHandshakes()
-
-    for server in complete:
-        for client in complete[server]:
-            print "Got completed handshake [%s --> %s]" % (server, client)
-
-            c1, c2, c3 = ProtocolLogic.getCiphertext(complete[server][client])
-            plaintext  = ProtocolLogic.getPlaintext(complete[server][client])
-            username   = ProtocolLogic.getUserName(complete[server][client])
-
-            print "  User = %s" % username
-            print "  C1   = %s" % c1.encode("hex")
-            print "  C2   = %s" % c2.encode("hex")
-            print "  C3   = %s" % c3.encode("hex")
-            print "  P    = %s" % plaintext.encode("hex")
+    if argv[0] == 'parse':
+        ParseCommand(argv[1:]).execute()
+    elif argv[0] == 'decrypt':
+        DecryptCommand(argv[1:]).execute()
+    elif argv[1] == 'help':
+        HelpCommand(argv[1:]).execute()
+    else:
+        HelpCommand.printGeneralUsage("Unknown command: %s" % argv[1])
 
 if __name__ == '__main__':
     main(sys.argv[1:])

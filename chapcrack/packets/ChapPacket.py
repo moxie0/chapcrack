@@ -1,5 +1,10 @@
-__author__  = "Moxie Marlinspike"
-__license__ = "GPLv3"
+"""
+A class to encapsulate and parse an MS-CHAPv2 Packet.
+"""
+
+__author__    = "Moxie Marlinspike"
+__license__   = "GPLv3"
+__copyright__ = "Copyright 2012, Moxie Marlinspike"
 
 class ChapPacket:
 

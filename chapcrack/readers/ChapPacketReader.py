@@ -1,24 +1,24 @@
-__author__  = "Moxie Marlinspike"
-__license__ = "GPLv3"
+"""
+Given a packet capture, this class will iterate over
+the MS-CHAPv2 packets in that capture.
+"""
+
+from chapcrack.packets.ChapPacket import ChapPacket
+from chapcrack.readers.PacketReader import PacketReader
+
+__author__    = "Moxie Marlinspike"
+__license__   = "GPLv3"
+__copyright__ = "Copyright 2012, Moxie Marlinspike"
 
 import socket
 import dpkt
-from chapcrack.ChapPacket import ChapPacket
 
-class ChapPacketReader:
+class ChapPacketReader(PacketReader):
 
     def __init__(self, capture):
-        self.capture = capture
-        self.reader  = dpkt.pcap.Reader(capture)
+        PacketReader.__init__(self, capture)
 
-    def __iter__(self):
-        for timestamp, data in self.reader:
-            packet = self._parseChapPacket(data)
-
-            if packet:
-                yield packet
-
-    def _parseChapPacket(self, data):
+    def _parseForTargetPacket(self, data):
         eth_packet = dpkt.ethernet.Ethernet(data)
 
         if isinstance(eth_packet.data, dpkt.ip.IP):
@@ -34,5 +34,7 @@ class ChapPacketReader:
                         return ChapPacket(ppp_packet.data,
                             socket.inet_ntoa(ip_packet.src),
                             socket.inet_ntoa(ip_packet.dst))
+
+        return None
 
 

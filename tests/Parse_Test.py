@@ -1,3 +1,7 @@
+from chapcrack.readers import ChapPacketReader
+from chapcrack.state import ProtocolLogic
+from chapcrack.state.MultiChapStateManager import MultiChapStateManager
+
 __author__  = "Moxie Marlinspike"
 __license__ = "GPLv3"
 
@@ -5,10 +9,8 @@ from passlib.hash import nthash
 from passlib.utils import des
 import unittest
 import binascii
-from chapcrack.ChapPacketReader import ChapPacketReader
-from chapcrack.HandshakeStateManager import HandshakeStateManager
-from chapcrack.ProtocolLogic import ProtocolLogic
-from tests.md4 import MD4
+from chapcrack.state.ChapStateManager import ChapStateManager
+from chapcrack.readers.ChapPacketReader import ChapPacketReader
 
 class ParseTest(unittest.TestCase):
 
@@ -16,17 +18,10 @@ class ParseTest(unittest.TestCase):
         result = des.des_encrypt_block('12345678', 'ABCDEFGH')
         assert binascii.hexlify(result) == "96de603eaed6256f"
 
-    def test_md4(self):
-        digest = MD4()
-        digest.update("abcdefghijklmnopqrstuvwxyz")
-        result = digest.digest()
-
-        assert binascii.hexlify(result) == "d79e1c308aa5bbcdeea8ed63df412da9"
-
     def test_parsing(self):
         capture    = open("tests/pptp.cap")
         reader     = ChapPacketReader(capture)
-        handshakes = HandshakeStateManager()
+        handshakes = MultiChapStateManager()
 
         for packet in reader:
             handshakes.addHandshakePacket(packet)
@@ -37,9 +32,9 @@ class ParseTest(unittest.TestCase):
 
         for server in complete:
             for client in complete[server]:
-                c1, c2, c3 = ProtocolLogic.getCiphertext(complete[server][client])
-                plaintext  = ProtocolLogic.getPlaintext(complete[server][client])
-                username   = ProtocolLogic.getUserName(complete[server][client])
+                c1, c2, c3 = complete[server][client].getCiphertext()
+                plaintext  = complete[server][client].getPlaintext()
+                username   = complete[server][client].getUserName()
 
                 assert username == "moxie"
 
