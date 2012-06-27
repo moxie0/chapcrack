@@ -19,10 +19,10 @@ def main(argv):
         ParseCommand(argv[1:]).execute()
     elif argv[0] == 'decrypt':
         DecryptCommand(argv[1:]).execute()
-    elif argv[1] == 'help':
+    elif argv[0] == 'help':
         HelpCommand(argv[1:]).execute()
     else:
-        HelpCommand.printGeneralUsage("Unknown command: %s" % argv[1])
+        HelpCommand.printGeneralUsage("Unknown command: %s" % argv[0])
 
 if __name__ == '__main__':
     main(sys.argv[1:])
