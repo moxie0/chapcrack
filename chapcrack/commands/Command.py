@@ -27,6 +27,11 @@ class Command:
 
         return None
 
+    def _containsOption(self, flag):
+        for option, value in self.values:
+            if option == flag:
+                return True
+
     def _getInputFile(self):
         inputFile = self._getOptionValue("-i")
 

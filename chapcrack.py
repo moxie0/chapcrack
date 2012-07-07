@@ -3,6 +3,7 @@
 """A tool for parsing and decrypting PPTP packet captures."""
 
 import sys
+from chapcrack.commands.CrackK3Command import CrackK3Command
 from chapcrack.commands.DecryptCommand import DecryptCommand
 from chapcrack.commands.HelpCommand import HelpCommand
 from chapcrack.commands.ParseCommand import ParseCommand
@@ -21,6 +22,8 @@ def main(argv):
         DecryptCommand(argv[1:]).execute()
     elif argv[0] == 'help':
         HelpCommand(argv[1:]).execute()
+    elif argv[0] == 'crack_k3':
+        CrackK3Command(argv[1:]).execute()
     else:
         HelpCommand.printGeneralUsage("Unknown command: %s" % argv[0])
 

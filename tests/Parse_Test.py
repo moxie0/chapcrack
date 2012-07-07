@@ -45,12 +45,25 @@ class ParseTest(unittest.TestCase):
                 key1 = hash[0:7]
                 key1 = des.expand_des_key(key1)
 
-                result = des.des_encrypt_block(key1, plaintext)
+                key2 = hash[7:14]
+                key2 = des.expand_des_key(key2)
 
-                print "DES Encryption: %s" % binascii.hexlify(result)
+                key3 = hash[14:16]
+                key3 += (chr(0x00) * 5)
+                key3 = des.expand_des_key(key3)
+
+                result1 = des.des_encrypt_block(key1, plaintext)
+                result2 = des.des_encrypt_block(key2, plaintext)
+                result3 = des.des_encrypt_block(key3, plaintext)
+
+                print "DES Encryption 1: %s" % binascii.hexlify(result1)
                 print "C1: %s" % binascii.hexlify(c1)
+                print "C2: %s" % binascii.hexlify(c2)
+                print "C3: %s" % binascii.hexlify(c3)
 
-                assert result == c1
+                assert result1 == c1
+                assert result2 == c2
+                assert result3 == c3
 
 
 
