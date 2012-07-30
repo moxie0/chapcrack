@@ -1,0 +1,13 @@
+Source: chapcrack
+Maintainer: Moxie Marlinspike <moxie@thoughtcrime.org>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3), debhelper (>= 7.4.3)
+Standards-Version: 3.9.1
+
+Package: chapcrack
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-passlib, python-dpkt,
+ python-m2crypto
+Description: Parses pcaps and extracts ciphertext/plaintext pairs from CH
+
