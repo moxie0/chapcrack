@@ -29,11 +29,11 @@ setup  (name             = 'chapcrack',
         author           = 'Moxie Marlinspike',
         author_email     = 'moxie@thoughtcrime.org',
         license          = 'GPLv3',
-        packages         = ["chapcrack"],
+        packages         = ["chapcrack", "chapcrack.commands", "chapcrack.crypto", "chapcrack.packets",
+                            "chapcrack.readers", "chapcrack.state"],
         package_dir      = {'chapcrack' : 'chapcrack/'},
         scripts          = ['chapcrack/chapcrack'],
         install_requires = REQUIRES,
-        data_files       = [('share/chapcrack', ['README', 'INSTALL', 'COPYING'])]
 )
 
 print "Cleaning up..."
