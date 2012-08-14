@@ -8,7 +8,6 @@ This class uses the python 'multiprocessing' module to iterate
 over the 2^16 possibilities and return K3.
 """
 from multiprocessing import Pool
-import functools
 from passlib.utils import des
 import sys
 
@@ -24,6 +23,16 @@ def checkKey(plaintext, ciphertext, b1, b2):
     if result == ciphertext:
         return keyCandidateBytes
 
+class CheckKeyPartial(object):
+
+    def __init__(self, plaintext, ciphertext, b1):
+        self.plaintext  = plaintext
+        self.ciphertext = ciphertext
+        self.b1         = b1
+
+    def __call__(self, b2):
+        return checkKey(self.plaintext, self.ciphertext, self.b1, b2)
+
 class K3Cracker:
 
     def crack(self, plaintext, ciphertext, markTime=False):
@@ -34,8 +43,7 @@ class K3Cracker:
                 sys.stdout.write(".")
                 sys.stdout.flush()
 
-            partial = functools.partial(checkKey, plaintext, ciphertext, b1)
-            results = pool.map(partial, range(0, 256))
+            results = pool.map(CheckKeyPartial(plaintext, ciphertext, b1), range(0, 256))
 
             for result in results:
                 if result is not None:
