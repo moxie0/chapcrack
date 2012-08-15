@@ -60,10 +60,8 @@ class DecryptCommand(Command):
 
         return output
 
-    def printHelp(self, message=None):
-        if message:
-            print "Error: %s\n\n" % message
-
+    @staticmethod
+    def printHelp():
         print(
             """Decrypts a PPTP capture with a cracked NT hash.
 

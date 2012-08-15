@@ -23,17 +23,6 @@ class ParseCommand(Command):
     def __init__(self, argv):
         Command.__init__(self, argv, "i", "n")
 
-    def printHelp(self):
-        print(
-            """Parses a PPTP capture and prints the ciphertext/plaintext pairs for decrypting.
-
-              parse
-
-            Arguments:
-              -i <input> : The capture file
-              -n         : If specified, doesn't crack K3
-            """)
-
     def execute(self):
         inputFile  = self._getInputFile()
         handshakes = MultiChapStateManager()
@@ -54,15 +43,20 @@ class ParseCommand(Command):
                 username   = complete[server][client].getUserName()
                 k3         = self._getK3(plaintext, c3)
 
-                print "                   User = %s" % username
-                print "                     C1 = %s" % c1.encode("hex")
-                print "                     C2 = %s" % c2.encode("hex")
-                print "                     C3 = %s" % c3.encode("hex")
-                print "                      P = %s" % plaintext.encode("hex")
+                self._printParameters(username, plaintext, c1, c2, c3, k3)
 
-                if k3 is not None:
-                    print "                     K3 = %s" % k3.encode("hex")
-                    print "CloudCracker Submission = $99$%s" % base64.b64encode("%s%s%s%s" % (plaintext, c1, c2, k3[0:2]))
+    def _printParameters(self, username, plaintext, c1, c2, c3, k3):
+        if username is not None:
+            print "                   User = %s" % username
+
+        print "                     C1 = %s" % c1.encode("hex")
+        print "                     C2 = %s" % c2.encode("hex")
+        print "                     C3 = %s" % c3.encode("hex")
+        print "                      P = %s" % plaintext.encode("hex")
+
+        if k3 is not None:
+            print "                     K3 = %s" % k3.encode("hex")
+            print "CloudCracker Submission = $99$%s" % base64.b64encode("%s%s%s%s" % (plaintext, c1, c2, k3[0:2]))
 
     def _getK3(self, plaintext, ciphertext):
         if not self._containsOption("-n"):
@@ -73,3 +67,15 @@ class ParseCommand(Command):
             return k3
 
         return None
+
+    @staticmethod
+    def printHelp():
+        print(
+            """Parses a PPTP capture and prints the ciphertext/plaintext pairs for decrypting.
+
+              parse
+
+            Arguments:
+              -i <input> : The capture file
+              -n         : If specified, doesn't crack K3
+            """)

@@ -7,6 +7,7 @@ from chapcrack.commands.CrackK3Command import CrackK3Command
 from chapcrack.commands.DecryptCommand import DecryptCommand
 from chapcrack.commands.HelpCommand import HelpCommand
 from chapcrack.commands.ParseCommand import ParseCommand
+from chapcrack.commands.RadiusCommand import RadiusCommand
 
 __author__    = "Moxie Marlinspike"
 __license__   = "GPLv3"
@@ -24,6 +25,8 @@ def main(argv):
         HelpCommand(argv[1:]).execute()
     elif argv[0] == 'crack_k3':
         CrackK3Command(argv[1:]).execute()
+    elif argv[0] == 'radius':
+        RadiusCommand(argv[1:]).execute()
     else:
         HelpCommand.printGeneralUsage("Unknown command: %s" % argv[0])
 
