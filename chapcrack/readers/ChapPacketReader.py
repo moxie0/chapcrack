@@ -30,6 +30,9 @@ class ChapPacketReader(PacketReader):
                 if hasattr(gre_packet, 'data') and isinstance(gre_packet.data, dpkt.ppp.PPP):
                     ppp_packet = gre_packet.data
 
+                    if ppp_packet.p == 255:
+                        ppp_packet.unpack(ppp_packet.pack()[2:])
+
                     if ppp_packet.p == 49699:
                         return ChapPacket(ppp_packet.data,
                             socket.inet_ntoa(ip_packet.src),
