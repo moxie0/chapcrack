@@ -24,7 +24,7 @@ A tool for parsing and decrypting MS-CHAPv2 network handshakes.
 	https://www.cloudcracker.com
 
 4.	When you get your results, you can decrypt a PPTP packet capture:
-	`chapcrack.py decrypt -i </path/to/capture.cap> -o output.cap -n <result>
+	`chapcrack.py decrypt -i </path/to/capture.cap> -o output.cap -n <result>`
 
 Bug tracker
 -----------
